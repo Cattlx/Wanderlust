@@ -3,31 +3,37 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private float MoveX, MoveZ;
-    public float MovementSpeed = 0.11f;
+    public float MovementSpeed = 15;
+    public float RotationSpeed = 2f;
 
-    Rigidbody rigidBody;
+    private Rigidbody rigidBody;
+    private Animator animator;
 
-
-    // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         MoveX = Input.GetAxis("Horizontal");
         MoveZ = Input.GetAxis("Vertical");
 
-        rigidBody.MovePosition(transform.position + (transform.forward * MoveZ * MovementSpeed / 2) + (transform.right * MoveX * MovementSpeed / 2));
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            if (Input.GetKey(KeyCode.W))
-            {
-                rigidBody.MovePosition(transform.position + (transform.forward * MoveZ * MovementSpeed) + (transform.right * MoveX * MovementSpeed));
-            }
-        }
+        // Calculate movement direction
+        Vector3 movementDirection = (transform.forward * MoveZ + transform.right * MoveX).normalized;
 
+        // Check if player is moving
+        bool isMoving = movementDirection.magnitude > 0.1f; // Adjust threshold as needed
+
+        // Set animator trigger
+        animator.SetBool("IsWalking", isMoving);
+
+        // Apply movement (ensure root motion is disabled or adjusted)
+        rigidBody.MovePosition(transform.position + movementDirection * MovementSpeed * Time.deltaTime);
+
+        // Rotate player
+        float rotation = RotationSpeed * Input.GetAxis("Mouse X");
+        transform.Rotate(0, rotation, 0);
     }
 }
