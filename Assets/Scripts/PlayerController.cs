@@ -1,20 +1,23 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
 public class PlayerMovement : MonoBehaviour
 {
     private float MoveX, MoveZ;
     public float MovementSpeed = 1.33f;
-    float RotationSpeed = 2f;
+    public float RotationSpeed = 2f;
+    public float Gravity = -9.81f;
 
-    private Rigidbody rigidBody;
+    private CharacterController characterController;
     private Animator animator;
+    private Vector3 velocity;
 
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -23,13 +26,14 @@ public class PlayerMovement : MonoBehaviour
         MoveX = Input.GetAxis("Horizontal");
         MoveZ = Input.GetAxis("Vertical");
 
-        // Check if player is moving
+        // Movement direction based on input
         Vector3 movementDirection = (transform.forward * MoveZ + transform.right * MoveX).normalized;
         bool isMoving = movementDirection.magnitude > 0.1f; // Adjust threshold as needed
 
-        // Set animator trigger
+        // Set animator trigger for walking
         animator.SetBool("IsWalking", isMoving);
 
+        // Handle kick and swing animations
         if (Input.GetMouseButtonDown(1))
         {
             animator.SetTrigger("Kick");
@@ -40,15 +44,27 @@ public class PlayerMovement : MonoBehaviour
             animator.SetTrigger("Swing");
         }
 
-
+        // Rotate the character based on mouse input
         float rotation = RotationSpeed * Input.GetAxis("Mouse X");
         transform.Rotate(0, rotation, 0);
-    }
 
-    void FixedUpdate()
-    {
-        // Apply movement in FixedUpdate for consistent physics behavior
-        Vector3 movementDirection = (transform.forward * MoveZ + transform.right * MoveX).normalized;
-        rigidBody.MovePosition(transform.position + movementDirection * MovementSpeed * Time.fixedDeltaTime);
+        // Apply movement
+        if (isMoving)
+        {
+            characterController.Move(movementDirection * MovementSpeed * Time.deltaTime);
+        }
+
+        // Apply gravity
+        if (characterController.isGrounded)
+        {
+            velocity.y = 0f;
+        }
+        else
+        {
+            velocity.y += Gravity * Time.deltaTime;
+        }
+
+        // Apply gravity effect through CharacterController
+        characterController.Move(velocity * Time.deltaTime);
     }
 }
