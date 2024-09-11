@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private float MoveX, MoveZ;
-    float MovementSpeed = 15;
+    public float MovementSpeed = 1.33f;
     float RotationSpeed = 2f;
 
     private Rigidbody rigidBody;
@@ -19,22 +19,36 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Capture input for movement and rotation
         MoveX = Input.GetAxis("Horizontal");
         MoveZ = Input.GetAxis("Vertical");
 
-        Vector3 movementDirection = (transform.forward * MoveZ + transform.right * MoveX).normalized;
-
         // Check if player is moving
+        Vector3 movementDirection = (transform.forward * MoveZ + transform.right * MoveX).normalized;
         bool isMoving = movementDirection.magnitude > 0.1f; // Adjust threshold as needed
 
         // Set animator trigger
         animator.SetBool("IsWalking", isMoving);
 
-        // Apply movement
-        rigidBody.MovePosition(transform.position + movementDirection * MovementSpeed * Time.deltaTime);
+        if (Input.GetMouseButtonDown(1))
+        {
+            animator.SetTrigger("Kick");
+        }
 
-        // Rotate player
+        if (Input.GetMouseButtonDown(0))
+        {
+            animator.SetTrigger("Swing");
+        }
+
+
         float rotation = RotationSpeed * Input.GetAxis("Mouse X");
         transform.Rotate(0, rotation, 0);
+    }
+
+    void FixedUpdate()
+    {
+        // Apply movement in FixedUpdate for consistent physics behavior
+        Vector3 movementDirection = (transform.forward * MoveZ + transform.right * MoveX).normalized;
+        rigidBody.MovePosition(transform.position + movementDirection * MovementSpeed * Time.fixedDeltaTime);
     }
 }
