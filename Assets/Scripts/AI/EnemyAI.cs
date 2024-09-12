@@ -6,11 +6,11 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent agent;
-    public Transform player;
     public LayerMask groundMask, playerMask;
+    Transform player;
 
     // Idle
-    public Vector3 walkPoint;
+    Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
 
@@ -24,9 +24,7 @@ public class EnemyAI : MonoBehaviour
 
     // States
     public float sightRange;
-    public bool playerInSightRange, playerInAttackRange;
-
-    public bool isDebugMode;
+    bool playerInSightRange, playerInAttackRange;
 
     private Animator animator;
     private Health playerHealth; // Reference to the player's Health component
@@ -126,17 +124,5 @@ public class EnemyAI : MonoBehaviour
     private void ResetAttack()
     {
         alreadyAttacked = false;
-    }
-
-    // DEBUG
-    private void OnDrawGizmos()
-    {
-        if (isDebugMode)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, attackRange);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, sightRange);
-        }
     }
 }
