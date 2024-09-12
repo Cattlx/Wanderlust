@@ -7,15 +7,16 @@ public class PlayerMovement : MonoBehaviour
     private float MoveX, MoveZ;
     public float MovementSpeed = 1.33f;
     public float RotationSpeed = 2f;
-    public float Gravity = -9.81f;
 
-    private CharacterController characterController;
+    private CharacterController controller;
     private Animator animator;
-    private Vector3 velocity;
+
+    // LayerMask for what the player considers as ground
+    public LayerMask GroundLayer;
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
+        controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -48,23 +49,12 @@ public class PlayerMovement : MonoBehaviour
         float rotation = RotationSpeed * Input.GetAxis("Mouse X");
         transform.Rotate(0, rotation, 0);
 
+
         // Apply movement
         if (isMoving)
         {
-            characterController.Move(movementDirection * MovementSpeed * Time.deltaTime);
+            Vector3 move = movementDirection * MovementSpeed;
+            controller.Move(move * Time.deltaTime); // Move the character controller
         }
-
-        // Apply gravity
-        if (characterController.isGrounded)
-        {
-            velocity.y = 0f;
-        }
-        else
-        {
-            velocity.y += Gravity * Time.deltaTime;
-        }
-
-        // Apply gravity effect through CharacterController
-        characterController.Move(velocity * Time.deltaTime);
     }
 }
