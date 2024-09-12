@@ -2,12 +2,11 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent agent;
-
     public Transform player;
-
     public LayerMask groundMask, playerMask;
 
     // Idle
@@ -16,19 +15,30 @@ public class EnemyAI : MonoBehaviour
     public float walkPointRange;
 
     // Attacking
-    public float timeBetweenAttacks;
+    public float timeBetweenAttacks = 2f;
     bool alreadyAttacked;
 
+    // Damage settings
+    public float attackDamage; // Damage the enemy deals to the player
+    public float attackRange;  // Range in which the enemy can damage the player
+
     // States
-    public float sightRange, attackRange;
+    public float sightRange;
     public bool playerInSightRange, playerInAttackRange;
 
     public bool isDebugMode;
+
+    private Animator animator;
+    private Health playerHealth; // Reference to the player's Health component
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+
+        // Get the player's Health component
+        playerHealth = player.GetComponent<Health>();
     }
 
     private void Update()
@@ -49,6 +59,7 @@ public class EnemyAI : MonoBehaviour
         if (walkPointSet)
         {
             agent.SetDestination(walkPoint);
+            animator.SetBool("IsWalking", true);
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
@@ -58,7 +69,6 @@ public class EnemyAI : MonoBehaviour
         {
             walkPointSet = false;
         }
-
     }
 
     private void SearchWalkPoint()
@@ -78,26 +88,38 @@ public class EnemyAI : MonoBehaviour
     private void ChasePlayer()
     {
         agent.SetDestination(player.position);
+        animator.SetBool("IsWalking", true);
     }
 
     private void AttackPlayer()
     {
         // Make sure enemy doesn't move
         agent.SetDestination(transform.position);
-
+        animator.SetBool("IsWalking", false);
         transform.LookAt(player);
 
         if (!alreadyAttacked)
         {
+            animator.SetTrigger("Swing");
 
-            ///Attack code here
-            ///
-            /// 
-            /// 
-            ///
+            // Check if player is in range to take damage
+            if (playerInAttackRange)
+            {
+                DealDamageToPlayer();
+            }
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
+        }
+    }
+
+    // Function to deal damage to the player
+    private void DealDamageToPlayer()
+    {
+        // Ensure the player's Health component is available
+        if (playerHealth != null)
+        {
+            playerHealth.TakeDamage(attackDamage);  // Call a method on the player's health to reduce health
         }
     }
 
@@ -107,7 +129,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     // DEBUG
-    private void Debug()
+    private void OnDrawGizmos()
     {
         if (isDebugMode)
         {

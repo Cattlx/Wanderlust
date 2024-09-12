@@ -28,4 +28,9 @@ public class Health : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+    }
 }
