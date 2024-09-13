@@ -107,9 +107,11 @@ GameObject:
   - component: {fileID: 7587506414720668713}
   - component: {fileID: 5988255764782767316}
   - component: {fileID: 2066124852288785211}
+  - component: {fileID: -6187336071376587916}
+  - component: {fileID: 3908302364206935737}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -176,6 +178,7 @@ MonoBehaviour:
   timeBetweenAttacks: 2
   attackDamage: 2
   attackRange: 1.25
+  sightRange: 0
 --- !u!95 &2066124852288785211
 Animator:
   serializedVersion: 5
@@ -197,6 +200,41 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-6187336071376587916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680962450868484234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f54f686c40c5d914897be9152e1f3ee2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 20
+  maxHealth: 20
+--- !u!135 &3908302364206935737
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680962450868484234}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.19
+  m_Center: {x: 0, y: 0.87, z: 0}
 --- !u!1 &1872409126723726174
 GameObject:
   m_ObjectHideFlags: 0

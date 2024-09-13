@@ -1,11 +1,9 @@
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class EnemyHealth : MonoBehaviour
 {
     public float health = 20f;
     public float maxHealth = 20f;
-
-    public GameManager gameManager;
 
 
     public void TakeDamage(float damage)
@@ -16,7 +14,5 @@ public class Health : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        gameManager.UpdateUI();
     }
 }
