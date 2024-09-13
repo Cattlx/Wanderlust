@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,15 +24,27 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab) && !isInventoryActive)
         {
-            inventory.SetActive(true);
-            isInventoryActive = true;
-            Cursor.lockState = CursorLockMode.None;
+            RenderInventory();
         }
         else if (Input.GetKeyDown(KeyCode.Tab) && isInventoryActive)
         {
-            inventory.SetActive(false);
-            isInventoryActive = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            CloseInventory();
         }
     }
+
+    private void RenderInventory()
+    {
+        inventory.SetActive(true);
+        isInventoryActive = true;
+        Cursor.lockState = CursorLockMode.None;
+        InventorySystem.current.DisplayInventory();
+    }
+
+    private void CloseInventory()
+    {
+        inventory.SetActive(false);
+        isInventoryActive = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
 }

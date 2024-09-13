@@ -17,9 +17,12 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 velocity; // Store the player's vertical velocity
     private bool isGrounded;
 
+    private GameObject currentItemToPickup; // Reference to the item in trigger zone
+
     [Header("Auditory Effects")]
     [SerializeField] private AudioClip _swingAudio;
     [SerializeField] private AudioClip _kickAudio;
+    [SerializeField] private AudioClip _pickupAudio; // Audio for pickup
 
     void Start()
     {
@@ -83,6 +86,12 @@ public class PlayerMovement : MonoBehaviour
         // Apply gravity
         velocity.y += Gravity * Time.deltaTime; // Add gravity to the vertical velocity
         controller.Move(velocity * Time.deltaTime); // Apply vertical movement (gravity)
+
+        // Check for "E" key press to pick up item
+        if (currentItemToPickup != null && Input.GetKeyDown(KeyCode.E))
+        {
+            PickupItem(currentItemToPickup);
+        }
     }
 
     // Ground check using a simple raycast
@@ -100,4 +109,37 @@ public class PlayerMovement : MonoBehaviour
             isGrounded = false;
         }
     }
+
+    // Detect when player enters a trigger (pickup zone)
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the object has a tag or component indicating it's a pickup item
+        if (other.TryGetComponent<ItemObject>(out ItemObject item))
+        {
+            currentItemToPickup = item.gameObject;
+            Debug.Log("Item in range for pickup: " + currentItemToPickup.name);
+        }
+    }
+
+    // Detect when player exits a trigger (pickup zone)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == currentItemToPickup)
+        {
+            currentItemToPickup = null; // No longer in range to pick up item
+            Debug.Log("Item out of range for pickup.");
+        }
+    }
+
+    // Pickup logic
+    private void PickupItem(GameObject item)
+    {
+        if (item.TryGetComponent<ItemObject>(out ItemObject itemObj))
+        {
+            AudioManager.Instance.PlaySound(_pickupAudio);
+            itemObj.OnHandlePickupItem();
+            Destroy(item);
+        }
+    }
+
 }
