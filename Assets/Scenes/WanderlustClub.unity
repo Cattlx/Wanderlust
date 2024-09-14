@@ -4295,9 +4295,10 @@ GameObject:
   - component: {fileID: 8774582908998657724}
   - component: {fileID: 3828674764993176498}
   - component: {fileID: 9040917171002773438}
-  - component: {fileID: 8506564665913378064}
   - component: {fileID: 5073043909194284205}
-  m_Layer: 0
+  - component: {fileID: 9040917171002773439}
+  - component: {fileID: 9040917171002773440}
+  m_Layer: 6
   m_Name: SRT-112
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8550,7 +8551,7 @@ GameObject:
   - component: {fileID: 9087775538690915168}
   - component: {fileID: 8613502766927796990}
   - component: {fileID: 3293650984121256221}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Front part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9957,7 +9958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactionPoint: {fileID: 859744046}
-  _interactionPointRadius: 0.5
+  _interactionPointRadius: 0.75
   _interactableMask:
     serializedVersion: 2
     m_Bits: 64
@@ -11451,27 +11452,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!135 &8506564665913378064
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195891878064571138}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.03
-  m_Center: {x: -4.656613e-10, y: 0.00015996394, z: 0}
 --- !u!4 &8532976374285796411
 Transform:
   m_ObjectHideFlags: 0
@@ -11685,7 +11665,7 @@ Transform:
   m_GameObject: {fileID: 195891878064571138}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 13.471936, y: 1.3504114, z: 0.11252994}
+  m_LocalPosition: {x: 13.471936, y: 1.727, z: -0.166}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11936,6 +11916,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &9040917171002773439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195891878064571138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87c338d9684eecc47ae7dd6c8047a58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prompt: SRT Sword (E)
+--- !u!65 &9040917171002773440
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195891878064571138}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0020000003, y: 0.053811368, z: 0.00084907823}
+  m_Center: {x: -0.00000000230968, y: 0.018191071, z: -9.313226e-10}
 --- !u!33 &9047921143642673638
 MeshFilter:
   m_ObjectHideFlags: 0

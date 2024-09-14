@@ -24,12 +24,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Auditory Effects")]
     [SerializeField] AudioClip _swingAudio;
     [SerializeField] AudioClip _kickAudio;
-    [SerializeField] AudioClip _pickupAudio;
 
     CharacterController controller;
     Animator animator;
 
-    GameObject currentItemToPickup;
     GameObject enemyToDamage;
 
     void Awake()
@@ -107,11 +105,6 @@ public class PlayerMovement : MonoBehaviour
                 DamageEnemy(enemyToDamage);
             }
         }
-
-        if (currentItemToPickup != null && Input.GetKeyDown(KeyCode.E))
-        {
-            PickupItem(currentItemToPickup);
-        }
     }
 
     private void GroundCheck()
@@ -122,11 +115,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out ItemObject item))
-        {
-            currentItemToPickup = item.gameObject;
-        }
-
         if (other.CompareTag("Enemy"))
         {
             enemyToDamage = other.gameObject;
@@ -135,24 +123,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == currentItemToPickup)
-        {
-            currentItemToPickup = null;
-        }
-
         if (other.CompareTag("Enemy"))
         {
             enemyToDamage = null;
-        }
-    }
-
-    private void PickupItem(GameObject item)
-    {
-        if (item.TryGetComponent(out ItemObject itemObj))
-        {
-            AudioManager.Instance.PlaySound(_pickupAudio);
-            itemObj.OnHandlePickupItem();
-            Destroy(item);
         }
     }
 
