@@ -5,11 +5,15 @@ public class EnemySpawner : MonoBehaviour
 {
 
     public GameObject EnemyPrefab;
+    public int EnemiesPerSpawnpoint = 0;
     public List<Transform> SpawnPoints = new List<Transform>();
 
     private void Awake()
     {
-        SpawnEnemies();
+        for (int i = 0; i < EnemiesPerSpawnpoint; i++)
+        {
+            SpawnEnemies();
+        }
     }
 
     private void SpawnEnemies()

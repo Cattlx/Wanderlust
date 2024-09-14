@@ -3,7 +3,7 @@ using UnityEngine;
 public class ElevatorButton : MonoBehaviour, IInteractable
 {
     [SerializeField] private string _prompt;
-    enum Scene { WanderlustClub, HomeBase }
+    enum Scene { WanderlustClub, TestGround }
     [SerializeField] private Scene SceneToLoad;
 
     public string InteractionPromt => _prompt;

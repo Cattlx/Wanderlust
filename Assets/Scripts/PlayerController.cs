@@ -16,19 +16,9 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
-    float knockbackForce = 3f;
-
-    [Header("Attack System")]
-    [SerializeField] float damage = 2f; //TODO: make separate attack class based on weapons
-
-    [Header("Auditory Effects")]
-    [SerializeField] AudioClip _swingAudio;
-    [SerializeField] AudioClip _kickAudio;
-
     CharacterController controller;
     Animator animator;
 
-    GameObject enemyToDamage;
 
     void Awake()
     {
@@ -41,7 +31,6 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleMovementInput();
         HandleRotation();
-        HandleInteractions();
     }
 
     void FixedUpdate()
@@ -88,55 +77,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HandleInteractions()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            animator.SetTrigger("Kick");
-            AudioManager.Instance.PlaySound(_kickAudio);
-        }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            animator.SetTrigger("Swing");
-            AudioManager.Instance.PlaySound(_swingAudio);
-            if (enemyToDamage != null)
-            {
-                DamageEnemy(enemyToDamage);
-            }
-        }
-    }
 
     private void GroundCheck()
     {
         RaycastHit hit;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, controller.height / 2 + GroundCheckDistance, GroundLayer);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            enemyToDamage = other.gameObject;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            enemyToDamage = null;
-        }
-    }
-
-    private void DamageEnemy(GameObject enemy)
-    {
-        EnemyHealth health = enemy.GetComponent<EnemyHealth>();
-        Rigidbody rb = enemy.GetComponent<Rigidbody>();
-        if (health != null)
-        {
-            health.TakeDamage(damage);
-            rb.AddForce(transform.up * knockbackForce);
-        }
     }
 }
