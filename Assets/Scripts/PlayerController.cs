@@ -5,30 +5,32 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float walkSpeed = 1.33f;
-    [SerializeField] private float sprintSpeed = 5f;
-    [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private LayerMask GroundLayer;
+    [SerializeField] float walkSpeed = 1.33f;
+    [SerializeField] float sprintSpeed = 5f;
+    [SerializeField] float gravity = -9.81f;
+    [SerializeField] LayerMask GroundLayer;
 
-    private float MoveX, MoveZ;
-    private float RotationSpeed = 2f;
-    private float GroundCheckDistance = 0.1f;
-    private Vector3 velocity;
-    private bool isGrounded;
+    float MoveX, MoveZ;
+    float RotationSpeed = 2f;
+    float GroundCheckDistance = -0.8f;
+    Vector3 velocity;
+    bool isGrounded;
+
+    float knockbackForce = 3f;
 
     [Header("Attack System")]
-    [SerializeField] private float damage = 2f; //TODO: make separate attack class based on weapons
+    [SerializeField] float damage = 2f; //TODO: make separate attack class based on weapons
 
     [Header("Auditory Effects")]
-    [SerializeField] private AudioClip _swingAudio;
-    [SerializeField] private AudioClip _kickAudio;
-    [SerializeField] private AudioClip _pickupAudio;
+    [SerializeField] AudioClip _swingAudio;
+    [SerializeField] AudioClip _kickAudio;
+    [SerializeField] AudioClip _pickupAudio;
 
-    private CharacterController controller;
-    private Animator animator;
+    CharacterController controller;
+    Animator animator;
 
-    private GameObject currentItemToPickup;
-    private GameObject enemyToDamage;
+    GameObject currentItemToPickup;
+    GameObject enemyToDamage;
 
     void Awake()
     {
@@ -157,9 +159,11 @@ public class PlayerMovement : MonoBehaviour
     private void DamageEnemy(GameObject enemy)
     {
         EnemyHealth health = enemy.GetComponent<EnemyHealth>();
+        Rigidbody rb = enemy.GetComponent<Rigidbody>();
         if (health != null)
         {
             health.TakeDamage(damage);
+            rb.AddForce(transform.up * knockbackForce);
         }
     }
 }

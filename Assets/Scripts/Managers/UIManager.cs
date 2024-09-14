@@ -1,11 +1,10 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private Slider healthSlider;
-    [SerializeField] private GameObject inventory;
+    [SerializeField] Slider healthSlider;
+    [SerializeField] GameObject inventory;
     bool isInventoryActive;
 
     void Start()
