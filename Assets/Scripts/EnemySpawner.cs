@@ -1,18 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
 
+    public GameObject EnemyPrefab;
+    public List<Transform> SpawnPoints = new List<Transform>();
+
+    private void Awake()
+    {
+        SpawnEnemies();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void SpawnEnemies()
     {
-
+        foreach (Transform spawnPoint in SpawnPoints)
+        {
+            Instantiate(EnemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        }
     }
 }
