@@ -3,47 +3,39 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] Slider healthSlider;
     [SerializeField] GameObject inventory;
     bool isInventoryActive;
 
-    void Start()
+    private void Start()
     {
-        inventory.SetActive(false);
-        isInventoryActive = false;
+        SetInventoryActive(false);
     }
 
-    public void UpdateHealth(float healthPercent)
+    private void Update()
     {
-        // Assuming healthPercent is a value between 0 and 1 (normalized)
-        healthSlider.value = healthPercent;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab) && !isInventoryActive)
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            RenderInventory();
-        }
-        else if (Input.GetKeyDown(KeyCode.Tab) && isInventoryActive)
-        {
-            CloseInventory();
+            ToggleInventory();
         }
     }
 
-    private void RenderInventory()
+    private void ToggleInventory()
     {
-        inventory.SetActive(true);
-        isInventoryActive = true;
-        Cursor.lockState = CursorLockMode.None;
-        InventorySystem.current.DisplayInventory();
+        if (isInventoryActive)
+        {
+            SetInventoryActive(false);
+        }
+        else
+        {
+            SetInventoryActive(true);
+            InventorySystem.current.DisplayInventory();
+        }
     }
 
-    private void CloseInventory()
+    private void SetInventoryActive(bool active)
     {
-        inventory.SetActive(false);
-        isInventoryActive = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        inventory.SetActive(active);
+        isInventoryActive = active;
+        Cursor.lockState = active ? CursorLockMode.None : CursorLockMode.Locked;
     }
-
 }

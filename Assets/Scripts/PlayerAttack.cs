@@ -3,22 +3,19 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerAttack : MonoBehaviour
 {
-    [Header("Auditory Effects")]
-    [SerializeField] private AudioClip _swingAudio;
-    [SerializeField] private AudioClip _kickAudio;
 
     [Header("Attack System")]
     [SerializeField] private float damage = 2f; // TODO: make separate attack class based on weapons
     [SerializeField] private float knockbackForce = 2f;
-    [SerializeField] private float attackRadius = 3f; // Radius to affect enemies
+    [SerializeField] private float attackRadius = 3f;
 
     private Animator animator;
-    private LayerMask enemyLayer; // Add a layer to filter enemies only
+    private LayerMask enemyLayer;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        enemyLayer = LayerMask.GetMask("Enemy"); // Make sure enemies are in the "Enemy" layer
+        enemyLayer = LayerMask.GetMask("Enemy");
     }
 
     // Update is called once per frame
@@ -43,15 +40,12 @@ public class PlayerAttack : MonoBehaviour
     private void PerformKick()
     {
         animator?.SetTrigger("Kick");
-        AudioManager.Instance?.PlaySound(_kickAudio);
     }
 
     private void PerformSwing()
     {
         animator?.SetTrigger("Swing");
-        AudioManager.Instance?.PlaySound(_swingAudio);
 
-        // Call the method to damage all enemies within the sphere
         ApplyDamageAndKnockback();
     }
 
@@ -69,7 +63,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void DamageEnemy(GameObject enemy)
     {
-        EnemyHealth health = enemy.GetComponent<EnemyHealth>();
+        Health health = enemy.GetComponent<Health>();
         Rigidbody rb = enemy.GetComponent<Rigidbody>();
 
         health.TakeDamage(damage);
@@ -83,7 +77,6 @@ public class PlayerAttack : MonoBehaviour
 
     }
 
-    // Visualization of the attack radius in the Scene view (for debugging purposes)
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;

@@ -8,32 +8,31 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float walkSpeed = 1.33f;
     [SerializeField] float sprintSpeed = 5f;
     [SerializeField] float gravity = -9.81f;
-    [SerializeField] LayerMask GroundLayer;
+    [SerializeField] float rotationSpeed = 2f;
+    [SerializeField] float groundCheckDistance = 0.1f;
+    [SerializeField] LayerMask groundLayer;
 
-    float MoveX, MoveZ;
-    float RotationSpeed = 2f;
-    float GroundCheckDistance = -0.8f;
+    float moveX, moveZ;
     Vector3 velocity;
     bool isGrounded;
 
     CharacterController controller;
     Animator animator;
 
-
-    void Awake()
+    private void Awake()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    private void Update()
     {
         HandleMovementInput();
         HandleRotation();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         GroundCheck();
         ApplyGravity();
@@ -41,10 +40,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        MoveX = Input.GetAxis("Horizontal");
-        MoveZ = Input.GetAxis("Vertical");
+        moveX = Input.GetAxis("Horizontal");
+        moveZ = Input.GetAxis("Vertical");
 
-        Vector3 movementDirection = (transform.forward * MoveZ + transform.right * MoveX).normalized;
+        Vector3 movementDirection = (transform.forward * moveZ + transform.right * moveX).normalized;
         bool isMoving = movementDirection.sqrMagnitude > 0.01f;
 
         animator.SetBool("IsWalking", isMoving);
@@ -59,8 +58,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleRotation()
     {
-        float rotation = RotationSpeed * Input.GetAxis("Mouse X");
-        transform.Rotate(0, rotation, 0);
+        float rotation = rotationSpeed * Input.GetAxis("Mouse X");
+        transform.Rotate(Vector3.up * rotation);
     }
 
     private void ApplyGravity()
@@ -70,18 +69,12 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -2f; // Small negative value to ensure it's grounded
         }
 
-        if (!isGrounded)
-        {
-            velocity.y += gravity * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime);
-        }
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
-
-
 
     private void GroundCheck()
     {
-        RaycastHit hit;
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, out hit, controller.height / 2 + GroundCheckDistance, GroundLayer);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, controller.height / 2 + groundCheckDistance, groundLayer);
     }
 }

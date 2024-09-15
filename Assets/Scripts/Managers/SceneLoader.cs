@@ -9,12 +9,11 @@ public class SceneLoader : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // Destroy the entire GameObject, not just the script
+            Destroy(gameObject);
         }
         else
         {
             Instance = this;
-            // DontDestroyOnLoad(gameObject); // Optional if you want to persist this object between scenes
         }
     }
 

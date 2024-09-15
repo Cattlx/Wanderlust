@@ -825,9 +825,9 @@ GameObject:
   - component: {fileID: 4319588091477210947}
   - component: {fileID: 6758027419464220147}
   - component: {fileID: 5677872423376340951}
-  - component: {fileID: 8987633181287791235}
   - component: {fileID: 1594551821073545858}
   - component: {fileID: 8717087397833508211}
+  - component: {fileID: 3270654522230923337}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -919,20 +919,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8987633181287791235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8212807008633664084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f54f686c40c5d914897be9152e1f3ee2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 20
-  maxHealth: 20
 --- !u!135 &1594551821073545858
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -981,6 +967,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3270654522230923337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8212807008633664084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210e8fe096624494ea248ac6404de711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 20
+  maxHealth: 20
+  uiManager: {fileID: 0}
 --- !u!1 &8436959466439465331
 GameObject:
   m_ObjectHideFlags: 0
