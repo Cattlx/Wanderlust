@@ -10,8 +10,6 @@ public class ItemPickup : MonoBehaviour, IInteractable
 
     public bool Interact(Interactor interactor)
     {
-        Debug.Log("Item Pickup");
-
         _itemObject.OnHandlePickupItem();
         return true;
     }

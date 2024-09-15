@@ -4,69 +4,66 @@ using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
-    public Dictionary<InventoryItemData, InventoryItem> m_itemDictionary;
-    public List<InventoryItem> inventory { get; private set; }
     public static InventorySystem current;
 
-    // Reference to UI elements
+    private Dictionary<InventoryItemData, InventoryItem> itemDictionary;
+    private List<InventoryItem> inventory;
+
     [Header("UI Elements")]
-    [SerializeField] private GameObject inventoryUIPanel;  // The panel or scroll view where items will be displayed
-    [SerializeField] private GameObject itemUIPrefab;      // Prefab for displaying an item in the inventory (Text/Image)
+    [SerializeField] private GameObject inventoryUIPanel;
+    [SerializeField] private GameObject itemUIPrefab;
 
     private void Awake()
     {
+        if (current == null)
+        {
+            current = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         inventory = new List<InventoryItem>();
-        m_itemDictionary = new Dictionary<InventoryItemData, InventoryItem>();
-        current = this;
+        itemDictionary = new Dictionary<InventoryItemData, InventoryItem>();
     }
 
     public InventoryItem Get(InventoryItemData referenceData)
     {
-        if (m_itemDictionary.TryGetValue(referenceData, out InventoryItem value))
-        {
-            return value;
-        }
-        return null;
+        itemDictionary.TryGetValue(referenceData, out InventoryItem item);
+        return item;
     }
 
     public void Add(InventoryItemData referenceData)
     {
-        if (m_itemDictionary.TryGetValue(referenceData, out InventoryItem value))
+        if (itemDictionary.TryGetValue(referenceData, out InventoryItem item))
         {
-            value.AddToStack();
+            item.AddToStack();
         }
         else
         {
-            InventoryItem newItem = new InventoryItem(referenceData);
-            inventory.Add(newItem);
-            m_itemDictionary.Add(referenceData, newItem);
+            item = new InventoryItem(referenceData);
+            inventory.Add(item);
+            itemDictionary[referenceData] = item;
         }
-        DisplayInventory();  // Update the UI whenever an item is added
+
+        UpdateInventoryUI();
     }
 
-    // Method to display all items in the UI
-    public void DisplayInventory()
+    public void UpdateInventoryUI()
     {
-        // Clear the current UI items first
+        // Clear existing UI items
         foreach (Transform child in inventoryUIPanel.transform)
         {
-            Destroy(child.gameObject); // Clean up previous UI elements
+            Destroy(child.gameObject);
         }
 
-        // Populate UI with inventory items
+        // Populate UI with current inventory
         foreach (InventoryItem item in inventory)
         {
-            // Instantiate a new UI item for each inventory item
             GameObject itemUI = Instantiate(itemUIPrefab, inventoryUIPanel.transform);
-
-            // Assuming itemUIPrefab has Text and Image components to display name and icon
-            Text itemNameText = itemUI.transform.Find("ItemNameText").GetComponent<Text>();
-            Image itemIconImage = itemUI.transform.Find("ItemIconImage").GetComponent<Image>();
-
-            // Set the text and image based on the item's data
-            itemNameText.text = item.data.displayName;
+            Image itemIconImage = itemUI.GetComponent<Image>();
             itemIconImage.sprite = item.data.icon;
         }
     }
-
 }

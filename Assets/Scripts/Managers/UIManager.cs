@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
         else
         {
             SetInventoryActive(true);
-            InventorySystem.current.DisplayInventory();
+            InventorySystem.current.UpdateInventoryUI();
         }
     }
 

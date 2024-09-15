@@ -5,29 +5,30 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator))]
 public class EnemyAI : MonoBehaviour
 {
-    public NavMeshAgent agent;
-    public LayerMask groundMask, playerMask;
-    Transform player;
-
-    // Idle
+    [Header("Patrol Settings")]
     Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
 
-    // Attacking
+    [Header("Attack Settings")]
     public float timeBetweenAttacks = 2f;
     bool alreadyAttacked;
 
-    // Damage settings
-    public float attackDamage; // Damage the enemy deals to the player
-    public float attackRange;  // Range in which the enemy can damage the player
+    [Header("Damage Settings")]
+    public float attackDamage;
+    public float attackRange;
 
-    // States
+    [Header("States")]
     public float sightRange;
     bool playerInSightRange, playerInAttackRange;
 
+    [Header("Misc")]
+    public NavMeshAgent agent;
+    public LayerMask groundMask, playerMask;
+    Transform player;
+
     private Animator animator;
-    private Health playerHealth; // Reference to the player's Health component
+    private Health playerHealth;
 
     private void Awake()
     {
@@ -35,7 +36,6 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        // Get the player's Health component
         playerHealth = player.GetComponent<Health>();
     }
 
@@ -71,7 +71,7 @@ public class EnemyAI : MonoBehaviour
 
     private void SearchWalkPoint()
     {
-        // Calculate random point in range
+        // Calculate random point in walk range
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
@@ -111,14 +111,9 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    // Function to deal damage to the player
     private void DealDamageToPlayer()
     {
-        // Ensure the player's Health component is available
-        if (playerHealth != null)
-        {
-            playerHealth.TakeDamage(attackDamage);  // Call a method on the player's health to reduce health
-        }
+        playerHealth.TakeDamage(attackDamage);
     }
 
     private void ResetAttack()
